@@ -20,7 +20,11 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     # Logar no DockerHub (DockerHub credentials devem ser configuradas nos Secrets do GitHub)
-    
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     # Construir a imagem Docker e tagueá-la
     - name: Build and Tag Docker Image
