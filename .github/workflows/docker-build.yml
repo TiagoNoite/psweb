@@ -11,22 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout do código fonte
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Configura o Docker
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-   
-      
-    - name: Docker login
-     
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    # Logar no DockerHub (DockerHub credentials devem ser configuradas nos Secrets do GitHub)
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
+    # Construir a imagem Docker e tagueá-la
     - name: Build and Tag Docker Image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/psweb:latest .
-
+    
+    # Empurrar a imagem para o DockerHub
     - name: Push Docker Image
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/psweb:latest
